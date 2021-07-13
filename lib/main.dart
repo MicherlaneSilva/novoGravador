@@ -6,6 +6,7 @@ import 'dart:io' as io;
 import 'dart:developer' as developer;
 import 'package:audioplayers/audioplayers.dart';
 import 'lista_audios.dart';
+import 'explorer.dart';
 
 void main() => runApp(const Recorder());
 
@@ -41,7 +42,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List gravacoes = [];
+  List<String> gravacoes = [];
   FlutterAudioRecorder2? recorder;
   Recording? current;
   bool estaGravando = false;
@@ -142,7 +143,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => runApp(ListaAudios(gravacoes: gravacoes)),
+        onPressed: () async {
+          String g = await salvar(gravacoes);
+          gravacoes = g.split(',');
+          runApp(ListaAudios(gravacoes: gravacoes));
+        },
         child: const Icon(Icons.list),
         backgroundColor: Colors.teal[900],
       ),
