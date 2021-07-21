@@ -60,9 +60,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget _construirImagem() {
     return Container(
-      width: 400,
-      height: 200,
-      child: Image.asset("assets/images/img.png"),
+      width: 300,
+      child: Image.asset(
+        "assets/images/img.png",
+        fit: BoxFit.contain,
+      ),
     );
   }
 
