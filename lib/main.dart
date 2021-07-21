@@ -66,22 +66,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _construirTextoStatus() {
-    return Container(
-      width: 400,
-      height: 50,
-      padding: const EdgeInsets.all(8.0),
-      decoration: const BoxDecoration(
-        color: Colors.teal,
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
-      child: Text(status,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
-    );
-  }
-
   Widget _construirBotaoGravacao() {
     return Container(
       decoration:
@@ -101,6 +85,85 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _construirBordasArrendondas(Widget filho, double altura) {
+    return Container(
+      width: 400,
+      height: altura,
+      padding: const EdgeInsets.all(8.0),
+      decoration: const BoxDecoration(
+        color: Colors.white60,
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      child: filho,
+    );
+  }
+
+  Widget _construirTexto(texto) {
+    return Text(texto.toString().toUpperCase(),
+        textAlign: TextAlign.center,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25));
+  }
+
+  Widget _construirBotoesAudio() {
+    return Container(
+      margin: const EdgeInsets.all(10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          !terminouGravacao
+              ? _construirBotaoGravacao()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _construirTexto("$currentTime | $completedTime"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            ouvirAudio();
+                          },
+                          iconSize: 35.0,
+                          icon: const Icon(Icons.play_arrow),
+                        ),
+                        IconButton(
+                          icon: Icon(isPlaying
+                              ? Icons.pause
+                              : Icons.play_arrow_outlined),
+                          iconSize: 35.0,
+                          onPressed: () {
+                            if (isPlaying) {
+                              audioPlayer.pause();
+                              setState(() {
+                                isPlaying = false;
+                                status = "áudio pausado";
+                              });
+                            } else {
+                              audioPlayer.resume();
+                              setState(() {
+                                isPlaying = true;
+                                status = "Playing áudio";
+                              });
+                            }
+                          },
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            showAlertDialog(context);
+                          },
+                          iconSize: 45.0,
+                          icon: const Icon(Icons.save),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,76 +177,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _construirImagem(),
-            _construirTextoStatus(),
-            Container(
-              width: 400,
-              height: 200,
-              decoration: const BoxDecoration(
-                color: Colors.white60,
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-              child: Container(
-                margin: const EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    !terminouGravacao
-                        ? _construirBotaoGravacao()
-                        : Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                "$currentTime | $completedTime",
-                                style: const TextStyle(fontSize: 35.0),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      ouvirAudio();
-                                    },
-                                    iconSize: 35.0,
-                                    icon: const Icon(Icons.play_arrow),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(isPlaying
-                                        ? Icons.pause
-                                        : Icons.play_arrow_outlined),
-                                    iconSize: 35.0,
-                                    onPressed: () {
-                                      if (isPlaying) {
-                                        audioPlayer.pause();
-                                        setState(() {
-                                          isPlaying = false;
-                                          status = "áudio pausado";
-                                        });
-                                      } else {
-                                        audioPlayer.resume();
-                                        setState(() {
-                                          isPlaying = true;
-                                          status = "Playing áudio";
-                                        });
-                                      }
-                                    },
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      showAlertDialog(context);
-                                    },
-                                    iconSize: 45.0,
-                                    icon: const Icon(Icons.save),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          )
-                  ],
-                ),
-              ),
-            )
+            _construirBordasArrendondas(_construirTexto(status), 50),
+            _construirBordasArrendondas(_construirBotoesAudio(), 200),
           ],
         ),
       ),
