@@ -58,6 +58,49 @@ class _MyHomePageState extends State<MyHomePage> {
     init();
   }
 
+  Widget _construirImagem() {
+    return Container(
+      width: 400,
+      height: 200,
+      child: Image.asset("assets/images/img.png"),
+    );
+  }
+
+  Widget _construirTextoStatus() {
+    return Container(
+      width: 400,
+      height: 50,
+      padding: const EdgeInsets.all(8.0),
+      decoration: const BoxDecoration(
+        color: Colors.teal,
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      ),
+      child: Text(status,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20)),
+    );
+  }
+
+  Widget _construirBotaoGravacao() {
+    return Container(
+      decoration:
+          const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+      child: IconButton(
+        onPressed: () {
+          if (estaGravando) {
+            stop();
+          } else {
+            start();
+          }
+        },
+        icon: Icon(estaGravando ? Icons.stop : Icons.mic_outlined),
+        color: Colors.white,
+        iconSize: 100,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,26 +113,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Container(
-              width: 400,
-              height: 200,
-              child: Image.asset("assets/images/img.png"),
-            ),
-            Container(
-              width: 400,
-              height: 50,
-              padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                color: Colors.teal,
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              ),
-              child: Text(status,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20)),
-            ),
+            _construirImagem(),
+            _construirTextoStatus(),
             Container(
               width: 400,
               height: 200,
@@ -104,30 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     !terminouGravacao
-                        ? Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.red, shape: BoxShape.circle),
-                            child: IconButton(
-                              onPressed: () {
-                                if (estaGravando) {
-                                  stop();
-                                } else {
-                                  start();
-                                }
-                              },
-                              icon: Icon(estaGravando
-                                  ? Icons.stop
-                                  : Icons.mic_outlined),
-                              color: Colors.white,
-                              iconSize: 100,
-                            ),
-                          )
+                        ? _construirBotaoGravacao()
                         : Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
                                 "$currentTime | $completedTime",
-                                style: TextStyle(fontSize: 35.0),
+                                style: const TextStyle(fontSize: 35.0),
                               ),
                               Row(
                                 mainAxisAlignment:
